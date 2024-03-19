@@ -87,7 +87,7 @@ const App = () => {
     <>
       <BrowserRouter>
         <Routes>
-          <Route
+          {/* <Route
             path={RouterConfig.CarePlan}
             element={
               <ErrorBoundary>
@@ -338,14 +338,12 @@ const App = () => {
                 </ErrorBoundary>
               </ErrorBoundary>
             }
-          />
+          /> */}
           <Route
             path={RouterConfig.Home}
             element={
               <ErrorBoundary>
-                <ErrorBoundary>
-                  <Home />
-                </ErrorBoundary>
+                <Home />
               </ErrorBoundary>
             }
           />
@@ -361,13 +359,11 @@ const App = () => {
             path={RouterConfig.Calendar}
             element={
               <ErrorBoundary>
-                <ErrorBoundary>
-                  <Calendar />
-                </ErrorBoundary>
+                <Calendar />
               </ErrorBoundary>
             }
           />
-          <Route
+          {/* <Route
             path={RouterConfig.Appointment(null)}
             element={
               <ErrorBoundary>
@@ -509,7 +505,7 @@ const App = () => {
                 </ErrorBoundary>
               </RequireAuth>
             }
-          />
+          /> */}
         </Routes>
       </BrowserRouter>
     </>
