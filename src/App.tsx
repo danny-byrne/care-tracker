@@ -47,7 +47,6 @@ import AppointmentView from "./features/Calendar/AppointmentView";
 import { AnnotationList, AnnotationView } from "./features/Annotations";
 import DocumentAnswer from "./features/Documents/DocumentAnswer";
 import { useEffect } from "react";
-import { SessionDataProvider } from "./common/contexts/SessionDataContext";
 
 // Prevent the body from scrolling when the user is typing in an input or textarea
 // This fixes the issue of the component being pushed off screen when the keyboard is opened on mobile
@@ -85,466 +84,435 @@ const App = () => {
   // RequireAuth is used if the page requires the user to be authenticated
   // RequireAdminPermissions is used if the page requires the user to be an Admin
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Layout Routes */}
-        <Route
-          element={
-            <SessionDataProvider>
-              <Layout>
-                <Outlet />
-              </Layout>
-            </SessionDataProvider>
-          }
-        >
-          {/* Auth Routes */}
+    <>
+      <BrowserRouter>
+        <Routes>
           <Route
+            path={RouterConfig.CarePlan}
+            element={
+              <ErrorBoundary>
+                <CarePlanLayout>
+                  <CarePlan />
+                </CarePlanLayout>
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.Documents}
+            element={
+              <ErrorBoundary>
+                <CarePlanLayout />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.Timeline}
+            element={
+              <ErrorBoundary>
+                <CarePlanLayout>
+                  <TimelineList />
+                </CarePlanLayout>
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.Document(null)}
+            element={
+              <ErrorBoundary>
+                <DocumentDetails />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.DocumentAnswer(null)}
+            element={
+              <ErrorBoundary>
+                <DocumentAnswer />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.Medications}
+            element={
+              <ErrorBoundary>
+                <MedManagerLayout />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.Medication(null)}
+            element={
+              <ErrorBoundary>
+                <Medication />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.Providers}
+            element={
+              <ErrorBoundary>
+                <ProviderList />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.Conditions}
+            element={
+              <ErrorBoundary>
+                <ConditionList />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.Provider(null)}
+            element={
+              <ErrorBoundary>
+                <ProviderView />
+              </ErrorBoundary>
+            }
+          />
+
+          <Route
+            path={RouterConfig.Condition(null)}
+            element={
+              <ErrorBoundary>
+                <ConditionView />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.Pharmacies}
+            element={
+              <ErrorBoundary>
+                <PharmacyList />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.Pharmacy(null)}
+            element={
+              <ErrorBoundary>
+                <PharmacyView />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.Immunizations}
+            element={
+              <ErrorBoundary>
+                <ImmunizationList />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.Immunization(null)}
+            element={
+              <ErrorBoundary>
+                <ImmunizationView />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.Allergies}
+            element={
+              <ErrorBoundary>
+                <AllergyList />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.Allergy(null)}
+            element={
+              <ErrorBoundary>
+                <AllergyView />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.Annotations}
+            element={
+              <ErrorBoundary>
+                <AnnotationList />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.Annotation(null)}
+            element={
+              <ErrorBoundary>
+                <AnnotationView />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.EmergencyContacts}
+            element={
+              <ErrorBoundary>
+                <EmergencyContactList />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.RecipientProfile}
+            element={
+              <ErrorBoundary>
+                <CareRecipient />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.TogetherTimeLayout}
+            element={
+              <ErrorBoundary>
+                <TogetherTimeLayout>
+                  <ErrorBoundary>
+                    <Activities />
+                  </ErrorBoundary>
+                </TogetherTimeLayout>
+              </ErrorBoundary>
+            }
+          />
+
+          <Route
+            path={RouterConfig.Members}
+            element={
+              <ErrorBoundary>
+                <TogetherTimeLayout>
+                  <ErrorBoundary>
+                    <CareCircle />
+                  </ErrorBoundary>
+                </TogetherTimeLayout>
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.Member(null)}
+            element={
+              <ErrorBoundary>
+                <Member />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.Activities}
+            element={
+              <ErrorBoundary>
+                <TogetherTimeLayout>
+                  <ErrorBoundary>
+                    <Activities />
+                  </ErrorBoundary>
+                </TogetherTimeLayout>
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.Activity(null)}
+            element={
+              <ErrorBoundary>
+                <ActivityView />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.DashboardPage}
+            element={
+              <ErrorBoundary>
+                <DashboardPage />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.FAQ}
+            element={
+              <ErrorBoundary>
+                <FrequentlyAskedQuestions />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.Question}
+            element={
+              <ErrorBoundary>
+                <ErrorBoundary>
+                  <QuestionView />
+                </ErrorBoundary>
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.Home}
+            element={
+              <ErrorBoundary>
+                <ErrorBoundary>
+                  <Home />
+                </ErrorBoundary>
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.PageNotFound}
+            element={
+              <ErrorBoundary>
+                <PageNotFound />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.Calendar}
+            element={
+              <ErrorBoundary>
+                <ErrorBoundary>
+                  <Calendar />
+                </ErrorBoundary>
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path={RouterConfig.Appointment(null)}
+            element={
+              <ErrorBoundary>
+                <AppointmentView />
+              </ErrorBoundary>
+            }
+          />
+
+          <Route
+            path={RouterConfig.TermsOfService}
             element={
               <RequireAuth>
-                <Outlet />
+                <ErrorBoundary>
+                  <TermsOfService />
+                </ErrorBoundary>
               </RequireAuth>
             }
-          >
-            {/* Admin Routes */}
-            <Route
-              element={
-                <RequireAdminPermissions>
-                  <Outlet />
-                </RequireAdminPermissions>
-              }
-            >
-              <Route
-                path={RouterConfig.CarePlan}
-                element={
-                  <ErrorBoundary>
-                    <CarePlanLayout>
-                      <CarePlan />
-                    </CarePlanLayout>
-                  </ErrorBoundary>
-                }
-              />
-              <Route
-                path={RouterConfig.Documents}
-                element={
-                  <ErrorBoundary>
-                    <CarePlanLayout />
-                  </ErrorBoundary>
-                }
-              />
-              <Route
-                path={RouterConfig.Timeline}
-                element={
-                  <ErrorBoundary>
-                    <CarePlanLayout>
-                      <TimelineList />
-                    </CarePlanLayout>
-                  </ErrorBoundary>
-                }
-              />
-              <Route
-                path={RouterConfig.Document(null)}
-                element={
-                  <ErrorBoundary>
-                    <DocumentDetails />
-                  </ErrorBoundary>
-                }
-              />
-              <Route
-                path={RouterConfig.DocumentAnswer(null)}
-                element={
-                  <ErrorBoundary>
-                    <DocumentAnswer />
-                  </ErrorBoundary>
-                }
-              />
-              <Route
-                path={RouterConfig.Medications}
-                element={
-                  <ErrorBoundary>
-                    <MedManagerLayout />
-                  </ErrorBoundary>
-                }
-              />
-              <Route
-                path={RouterConfig.Medication(null)}
-                element={
-                  <ErrorBoundary>
-                    <Medication />
-                  </ErrorBoundary>
-                }
-              />
-              <Route
-                path={RouterConfig.Providers}
-                element={
-                  <ErrorBoundary>
-                    <ProviderList />
-                  </ErrorBoundary>
-                }
-              />
-              <Route
-                path={RouterConfig.Conditions}
-                element={
-                  <ErrorBoundary>
-                    <ConditionList />
-                  </ErrorBoundary>
-                }
-              />
-              <Route
-                path={RouterConfig.Provider(null)}
-                element={
-                  <ErrorBoundary>
-                    <ProviderView />
-                  </ErrorBoundary>
-                }
-              />
-
-              <Route
-                path={RouterConfig.Condition(null)}
-                element={
-                  <ErrorBoundary>
-                    <ConditionView />
-                  </ErrorBoundary>
-                }
-              />
-              <Route
-                path={RouterConfig.Pharmacies}
-                element={
-                  <ErrorBoundary>
-                    <PharmacyList />
-                  </ErrorBoundary>
-                }
-              />
-              <Route
-                path={RouterConfig.Pharmacy(null)}
-                element={
-                  <ErrorBoundary>
-                    <PharmacyView />
-                  </ErrorBoundary>
-                }
-              />
-              <Route
-                path={RouterConfig.Immunizations}
-                element={
-                  <ErrorBoundary>
-                    <ImmunizationList />
-                  </ErrorBoundary>
-                }
-              />
-              <Route
-                path={RouterConfig.Immunization(null)}
-                element={
-                  <ErrorBoundary>
-                    <ImmunizationView />
-                  </ErrorBoundary>
-                }
-              />
-              <Route
-                path={RouterConfig.Allergies}
-                element={
-                  <ErrorBoundary>
-                    <AllergyList />
-                  </ErrorBoundary>
-                }
-              />
-              <Route
-                path={RouterConfig.Allergy(null)}
-                element={
-                  <ErrorBoundary>
-                    <AllergyView />
-                  </ErrorBoundary>
-                }
-              />
-              <Route
-                path={RouterConfig.Annotations}
-                element={
-                  <ErrorBoundary>
-                    <AnnotationList />
-                  </ErrorBoundary>
-                }
-              />
-              <Route
-                path={RouterConfig.Annotation(null)}
-                element={
-                  <ErrorBoundary>
-                    <AnnotationView />
-                  </ErrorBoundary>
-                }
-              />
-              <Route
-                path={RouterConfig.EmergencyContacts}
-                element={
-                  <ErrorBoundary>
-                    <EmergencyContactList />
-                  </ErrorBoundary>
-                }
-              />
-              {/* /Admin Routes */}
-            </Route>
-
-            <Route
-              path={RouterConfig.RecipientProfile}
-              element={
+          />
+          <Route
+            path={RouterConfig.GetStarted}
+            element={
+              <RequireAuth>
                 <ErrorBoundary>
-                  <CareRecipient />
+                  <GetStarted />
                 </ErrorBoundary>
-              }
-            />
-            <Route
-              path={RouterConfig.TogetherTimeLayout}
-              element={
-                <ErrorBoundary>
-                  <TogetherTimeLayout>
-                    <ErrorBoundary>
-                      <Activities />
-                    </ErrorBoundary>
-                  </TogetherTimeLayout>
-                </ErrorBoundary>
-              }
-            />
-
-            <Route
-              path={RouterConfig.Members}
-              element={
-                <ErrorBoundary>
-                  <TogetherTimeLayout>
-                    <ErrorBoundary>
-                      <CareCircle />
-                    </ErrorBoundary>
-                  </TogetherTimeLayout>
-                </ErrorBoundary>
-              }
-            />
-            <Route
-              path={RouterConfig.Member(null)}
-              element={
-                <ErrorBoundary>
-                  <Member />
-                </ErrorBoundary>
-              }
-            />
-            <Route
-              path={RouterConfig.Activities}
-              element={
-                <ErrorBoundary>
-                  <TogetherTimeLayout>
-                    <ErrorBoundary>
-                      <Activities />
-                    </ErrorBoundary>
-                  </TogetherTimeLayout>
-                </ErrorBoundary>
-              }
-            />
-            <Route
-              path={RouterConfig.Activity(null)}
-              element={
-                <ErrorBoundary>
-                  <ActivityView />
-                </ErrorBoundary>
-              }
-            />
-            <Route
-              path={RouterConfig.DashboardPage}
-              element={
-                <ErrorBoundary>
-                  <DashboardPage />
-                </ErrorBoundary>
-              }
-            />
-            <Route
-              path={RouterConfig.FAQ}
-              element={
-                <ErrorBoundary>
-                  <FrequentlyAskedQuestions />
-                </ErrorBoundary>
-              }
-            />
-            <Route
-              path={RouterConfig.Question}
-              element={
-                <ErrorBoundary>
-                  <ErrorBoundary>
-                    <QuestionView />
-                  </ErrorBoundary>
-                </ErrorBoundary>
-              }
-            />
-            <Route
-              path={RouterConfig.Home}
-              element={
-                <ErrorBoundary>
-                  <ErrorBoundary>
-                    <Home />
-                  </ErrorBoundary>
-                </ErrorBoundary>
-              }
-            />
-            <Route
-              path={RouterConfig.PageNotFound}
-              element={
-                <ErrorBoundary>
-                  <PageNotFound />
-                </ErrorBoundary>
-              }
-            />
-            <Route
-              path={RouterConfig.Calendar}
-              element={
-                <ErrorBoundary>
-                  <ErrorBoundary>
-                    <Calendar />
-                  </ErrorBoundary>
-                </ErrorBoundary>
-              }
-            />
-            <Route
-              path={RouterConfig.Appointment(null)}
-              element={
-                <ErrorBoundary>
-                  <AppointmentView />
-                </ErrorBoundary>
-              }
-            />
-            {/*/ Auth Routes */}
-          </Route>
-          {/* /Layout Routes */}
-        </Route>
-
-        <Route
-          path={RouterConfig.TermsOfService}
-          element={
-            <RequireAuth>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path={RouterConfig.LandingPage}
+            element={
               <ErrorBoundary>
-                <TermsOfService />
+                <LandingPage />
               </ErrorBoundary>
-            </RequireAuth>
-          }
-        />
-        <Route
-          path={RouterConfig.GetStarted}
-          element={
-            <RequireAuth>
+            }
+          />
+          <Route
+            path={RouterConfig.LoginLoadingPage}
+            element={
               <ErrorBoundary>
-                <GetStarted />
+                <LoginLoadingPage />
               </ErrorBoundary>
-            </RequireAuth>
-          }
-        />
-        <Route
-          path={RouterConfig.LandingPage}
-          element={
-            <ErrorBoundary>
-              <LandingPage />
-            </ErrorBoundary>
-          }
-        />
-        <Route
-          path={RouterConfig.LoginLoadingPage}
-          element={
-            <ErrorBoundary>
-              <LoginLoadingPage />
-            </ErrorBoundary>
-          }
-        />
-        <Route
-          path={RouterConfig.PendingUserPage}
-          element={
-            <ErrorBoundary>
-              <PendingUserPage />
-            </ErrorBoundary>
-          }
-        />
-        <Route
-          path={RouterConfig.TermsSuccessFAQ}
-          element={
-            <RequireAuth>
+            }
+          />
+          <Route
+            path={RouterConfig.PendingUserPage}
+            element={
               <ErrorBoundary>
-                <FrequentlyAskedQuestions fromInitLogin />
+                <PendingUserPage />
               </ErrorBoundary>
-            </RequireAuth>
-          }
-        />
-        <Route
-          path={RouterConfig.TermsSuccess}
-          element={
-            <RequireAuth>
-              <ErrorBoundary>
-                <ServiceTermsSuccess />
-              </ErrorBoundary>
-            </RequireAuth>
-          }
-        />
-        <Route
-          path={RouterConfig.Goals}
-          element={
-            <RequireAdminPermissions>
-              <ErrorBoundary>
-                <GoalsPage />
-              </ErrorBoundary>
-            </RequireAdminPermissions>
-          }
-        />
-        <Route
-          path={RouterConfig.GetStartedRecipientProfile}
-          element={
-            <RequireAdminPermissions>
-              <ErrorBoundary>
-                <RecipientProfileWizard />
-              </ErrorBoundary>
-            </RequireAdminPermissions>
-          }
-        />
-        <Route
-          path={RouterConfig.GoalInfoCarePlan}
-          element={
-            <RequireAdminPermissions>
-              <ErrorBoundary>
-                <GoalInfoCarePlan />
-              </ErrorBoundary>
-            </RequireAdminPermissions>
-          }
-        />
-        <Route
-          path={RouterConfig.GoalInfoMedManager}
-          element={
-            <RequireAdminPermissions>
-              <ErrorBoundary>
-                <GoalInfoMedManager />
-              </ErrorBoundary>
-            </RequireAdminPermissions>
-          }
-        />
-        <Route
-          path={RouterConfig.GoalInfoTogetherTimeMember}
-          element={
-            <RequireAuth>
-              <ErrorBoundary>
-                <GoalInfoTogetherTimeMember />
-              </ErrorBoundary>
-            </RequireAuth>
-          }
-        />
-        <Route
-          path={RouterConfig.GoalInfoTogetherTimeAdmin}
-          element={
-            <RequireAdminPermissions>
-              <ErrorBoundary>
-                <GoalInfoTogetherTimeAdmin />
-              </ErrorBoundary>
-            </RequireAdminPermissions>
-          }
-        />
-        <Route
-          path={RouterConfig.NotificationsSubscribe}
-          element={
-            <RequireAuth>
-              <ErrorBoundary>
-                <NotificationsSubscribe />
-              </ErrorBoundary>
-            </RequireAuth>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+            }
+          />
+          <Route
+            path={RouterConfig.TermsSuccessFAQ}
+            element={
+              <RequireAuth>
+                <ErrorBoundary>
+                  <FrequentlyAskedQuestions fromInitLogin />
+                </ErrorBoundary>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path={RouterConfig.TermsSuccess}
+            element={
+              <RequireAuth>
+                <ErrorBoundary>
+                  <ServiceTermsSuccess />
+                </ErrorBoundary>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path={RouterConfig.Goals}
+            element={
+              <RequireAdminPermissions>
+                <ErrorBoundary>
+                  <GoalsPage />
+                </ErrorBoundary>
+              </RequireAdminPermissions>
+            }
+          />
+          <Route
+            path={RouterConfig.GetStartedRecipientProfile}
+            element={
+              <RequireAdminPermissions>
+                <ErrorBoundary>
+                  <RecipientProfileWizard />
+                </ErrorBoundary>
+              </RequireAdminPermissions>
+            }
+          />
+          <Route
+            path={RouterConfig.GoalInfoCarePlan}
+            element={
+              <RequireAdminPermissions>
+                <ErrorBoundary>
+                  <GoalInfoCarePlan />
+                </ErrorBoundary>
+              </RequireAdminPermissions>
+            }
+          />
+          <Route
+            path={RouterConfig.GoalInfoMedManager}
+            element={
+              <RequireAdminPermissions>
+                <ErrorBoundary>
+                  <GoalInfoMedManager />
+                </ErrorBoundary>
+              </RequireAdminPermissions>
+            }
+          />
+          <Route
+            path={RouterConfig.GoalInfoTogetherTimeMember}
+            element={
+              <RequireAuth>
+                <ErrorBoundary>
+                  <GoalInfoTogetherTimeMember />
+                </ErrorBoundary>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path={RouterConfig.GoalInfoTogetherTimeAdmin}
+            element={
+              <RequireAdminPermissions>
+                <ErrorBoundary>
+                  <GoalInfoTogetherTimeAdmin />
+                </ErrorBoundary>
+              </RequireAdminPermissions>
+            }
+          />
+          <Route
+            path={RouterConfig.NotificationsSubscribe}
+            element={
+              <RequireAuth>
+                <ErrorBoundary>
+                  <NotificationsSubscribe />
+                </ErrorBoundary>
+              </RequireAuth>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 };
 
