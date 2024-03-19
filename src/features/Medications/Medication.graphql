@@ -1,0 +1,100 @@
+mutation UpdateMedication($prescription: MedicationPrescriptionUpdateInput!) {
+    medicationPrescriptionUpdate(input: $prescription) {
+        result {
+            id
+            refills(where: { recordStatus: { eq: ACTIVE } }) {
+                id
+                refillDate
+                recordStatus
+                pharmacy {
+                    id
+                    name
+                    phoneNumber
+                    recordStatus
+                    location {
+                        id
+                        addressLine1
+                        city
+                        freeTextAddress
+                        state
+                        zipCode
+                    }
+                }
+            }
+        }
+    }
+}
+
+mutation RefillUpdate($refill: RefillUpdateInput!) {
+    refillUpdate(input: $refill) {
+        result {
+            id
+        }
+    }
+}
+
+mutation DeleteMedication($id: UUID!) {
+    medicationPrescriptionDelete(input: { id: $id }) {
+        result {
+            id
+        }
+    }
+}
+
+mutation AddMedication($prescription: MedicationPrescriptionCreateInput!) {
+    medicationPrescriptionCreate(input: $prescription) {
+        result {
+            id
+        }
+    }
+}
+
+mutation RefillDelete($id: UUID!) {
+    refillDelete(input: { id: $id }) {
+        result {
+            id
+        }
+    }
+}
+
+mutation DosageDelete($id: UUID!) {
+    dosageDelete(input: { id: $id }) {
+        result {
+            id
+        }
+    }
+}
+
+query MedicationSearch($searchText: String!) {
+    medicationSearch(input: { searchText: $searchText }) {
+        result {
+            items {
+                routedDoseFormDrugID
+                routedDoseFormDrugDesc
+                routeDesc
+                drugNameDesc
+                doseFormDesc
+            }
+        }
+    }
+}
+
+query DispensableDrugs($routedDoseFormDrugId: String!) {
+    dispensableDrugs(input: { routedDoseFormDrugId: $routedDoseFormDrugId }) {
+        result {
+            items {
+                dispensableDrugID
+                medStrength
+                medStrengthUnit
+            }
+        }
+    }
+}
+
+mutation EndMedication($id: UUID!) {
+    medicationPrescriptionSetHistorical(input: { id: $id }) {
+        result {
+            id
+        }
+    }
+}

@@ -1,0 +1,1132 @@
+query GetUserInfo {
+    me {
+        id
+        careCircleName
+        role
+        careCircleId
+        imageBase64
+        displayName
+        firstName
+        agreesHasConsentToManageLoveOnesHealth
+        agreesToTermsAndPrivacy
+        understandsIntendedAppUse
+        understandsMicrosoftUseOfTheirData
+        understandsNotPermittedToUsePlatformForMinors
+        agreesToOpenAiUse
+    }
+}
+
+query GetUserAppProfileInfo {
+    me {
+        id
+        imageBase64
+        displayName
+        mobile
+        email
+        role
+    }
+}
+
+query GetUserTermsOfServiceAgreementsInfo {
+    me {
+        understandsNotPermittedToUsePlatformForMinors
+        agreesHasConsentToManageLoveOnesHealth
+        agreesToTermsAndPrivacy
+        understandsIntendedAppUse
+        understandsMicrosoftUseOfTheirData
+        agreesToOpenAiUse
+    }
+}
+
+query GetMember($id: UUID!) {
+    usersCareCircle {
+        id
+        careCircleMembers(where: { careGiverId: { eq: $id } }) {
+            id
+            status
+            profile {
+                id
+                role
+            }
+            careGiver {
+                id
+                displayName
+                email
+                imageBase64
+                timeZoneGenericName
+                timeZoneID
+                mobile
+            }
+            isEmergencyContact
+            relationshipToLovedOne
+        }
+    }
+}
+
+query GetMembers {
+    usersCareCircle {
+        id
+        careCircleMembers {
+            id
+            status
+            profile {
+                id
+                role
+            }
+            careGiver {
+                id
+                displayName
+                email
+                imageBase64
+            }
+        }
+    }
+}
+
+query GetCareTeam {
+    usersCareCircle {
+        id
+        name
+        careCircleMembers {
+            id
+            profile {
+                id
+                role
+            }
+            careGiver {
+                displayName
+                id
+                mobile
+                email
+                imageBase64
+            }
+            isEmergencyContact
+            relationshipToLovedOne
+        }
+        appInvitations {
+            id
+            deliveryMethod
+            inviteFromName
+            inviteRecipientEmail
+            status
+            careGiverAccepted
+            makeAdmin
+            makeEmergencyContact
+            relationshipToLovedOne
+        }
+    }
+    me {
+        id
+        careCircleName
+        role
+        careCircleId
+        imageBase64
+        displayName
+        firstName
+    }
+}
+
+query GetPrescriptions {
+    careRecipientMedicationPrescriptions {
+        id
+        prescriptions(where: { recordStatus: { eq: ACTIVE } }) {
+            id
+            recordStatus
+            strengthValue
+            overTheCounter
+            prescribingProvider {
+                id
+                recordStatus
+            }
+            takenFor {
+                id
+                recordStatus
+                condition {
+                    name
+                    id
+                }
+                conditionStartDateDay
+                conditionStartDateYear
+                conditionStartDateMonth
+                conditionStartDateRelativePeriodEnd
+                conditionStartDateRelativePeriodStart
+            }
+            medication {
+                id
+                name
+            }
+            endDate
+            refills {
+                refillDate
+                recordStatus
+                id
+                pharmacy {
+                    id
+                    name
+                    phoneNumber
+                    recordStatus
+                    location {
+                        id
+                        addressLine1
+                        addressLine2
+                        city
+                        singleLineAddress @client
+                        freeTextAddress
+                        state
+                        zipCode
+                    }
+                }
+            }
+            prescribingProvider {
+                id
+                firstName
+                lastName
+                recordStatus
+                address {
+                    id
+                    singleLineAddress @client
+                    freeTextAddress
+                    addressLine1
+                    addressLine2
+                    city
+                    country
+                    state
+                    zipCode
+                }
+                primarySpecialty
+                phoneNumber
+            }
+        }
+    }
+}
+
+query GetPrescriptionsWithSchedule {
+    careRecipientMedicationPrescriptions {
+        id
+        prescriptions(where: { recordStatus: { eq: ACTIVE } }) {
+            id
+            recordStatus
+            strengthValue
+            overTheCounter
+            directions
+            takenFor {
+                id
+                recordStatus
+                condition {
+                    name
+                    id
+                }
+                conditionStartDateDay
+                conditionStartDateYear
+                conditionStartDateMonth
+                conditionStartDateRelativePeriodEnd
+                conditionStartDateRelativePeriodStart
+            }
+            medication {
+                id
+                name
+                routedDoseFormDrugId
+                dispensableDrugId
+            }
+            endDate
+            refills {
+                # Commenting out refill filter until backend deadlock issue is resolved
+                # refills(where: { recordStatus: { eq: ACTIVE } }) {
+                recordStatus
+                id
+                refillDate
+                pharmacy {
+                    id
+                    name
+                    phoneNumber
+                    recordStatus
+                    location {
+                        id
+                        addressLine1
+                        addressLine2
+                        city
+                        singleLineAddress @client
+                        freeTextAddress
+                        state
+                        zipCode
+                    }
+                }
+            }
+            dosages(where: { recordStatus: { eq: ACTIVE } }) {
+                id
+                recordStatus
+                value
+                unit
+                schedule
+            }
+            prescribingProvider {
+                id
+                firstName
+                lastName
+                recordStatus
+                address {
+                    id
+                    singleLineAddress @client
+                    freeTextAddress
+                    addressLine1
+                    addressLine2
+                    city
+                    country
+                    state
+                    zipCode
+                }
+                primarySpecialty
+                phoneNumber
+            }
+        }
+    }
+}
+
+query GetMedication($id: UUID!) {
+    careRecipientMedicationPrescriptions {
+        id
+        prescriptions(where: { id: { eq: $id } }) {
+            id
+            recordStatus
+            strengthValue
+            overTheCounter
+            directions
+            takenFor {
+                id
+                recordStatus
+                condition {
+                    name
+                    id
+                }
+                conditionStartDateDay
+                conditionStartDateYear
+                conditionStartDateMonth
+                conditionStartDateRelativePeriodEnd
+                conditionStartDateRelativePeriodStart
+            }
+            medication {
+                id
+                name
+                routedDoseFormDrugId
+                dispensableDrugId
+            }
+            startDate
+            endDate
+            refills(where: { recordStatus: { eq: ACTIVE } }) {
+                id
+                refillDate
+                recordStatus
+                pharmacy {
+                    id
+                    name
+                    phoneNumber
+                    recordStatus
+                    location {
+                        id
+                        addressLine1
+                        addressLine2
+                        city
+                        singleLineAddress @client
+                        freeTextAddress
+                        state
+                        zipCode
+                    }
+                }
+            }
+            dosages(where: { recordStatus: { eq: ACTIVE } }) {
+                id
+                recordStatus
+                value
+                unit
+                schedule
+            }
+            prescribingProvider {
+                id
+                firstName
+                lastName
+                recordStatus
+                address {
+                    id
+                    singleLineAddress @client
+                    freeTextAddress
+                    addressLine1
+                    addressLine2
+                    city
+                    country
+                    state
+                    zipCode
+                }
+                primarySpecialty
+                phoneNumber
+            }
+        }
+    }
+}
+
+query GetAppInvitation($inviteCode: String!) {
+    appInvitation(inviteCode: $inviteCode) {
+        inviteFromName
+        careCircleName
+    }
+}
+
+query GetUserNotificationPreferences {
+    me {
+        refillRemindersNotificationsEnabled
+        dailyMedicationDosesNotificationsEnabled
+        calendarAppointmentsNotificationsEnabled
+        postsReactionsRepliesNotificationsEnabled
+        activitySignUpsNotificationsEnabled
+        newMemberJoinsNotificationsEnabled
+    }
+}
+
+query GetNotificationPreferences {
+    notificationPreferences {
+        profileId
+        notificationsPreferences {
+            notification {
+                feature
+                availableChannels
+                requiresUserOptIn
+            }
+            userChannelSelections {
+                sMSEnabled
+                emailEnabled
+                inAppEnabled
+            }
+        }
+    }
+}
+
+query GetCareRecipientConditions {
+    careRecipientConditions {
+        conditions {
+            condition {
+                id
+                name
+                codes {
+                    code
+                    id
+                }
+            }
+            recordStatus
+            conditionEndDateDay
+            conditionEndDateMonth
+            conditionEndDateYear
+            conditionEndDateRelativePeriodStart
+            conditionEndDateRelativePeriodEnd
+            conditionStartDateDay
+            conditionStartDateMonth
+            conditionStartDateYear
+            conditionStartDateRelativePeriodStart
+            conditionStartDateRelativePeriodEnd
+            conditionRelativeTimePeriod
+            id
+            current
+        }
+        id
+    }
+}
+
+query GetProviders {
+    careRecipientProviders {
+        id
+        providers {
+            recordStatus
+            firstName
+            id
+            lastName
+            phoneNumber
+            address {
+                addressLine1
+                addressLine2
+                city
+                country
+                state
+                zipCode
+                id
+                singleLineAddress @client
+                freeTextAddress
+            }
+            primarySpecialty
+            codes {
+                id
+                code
+            }
+        }
+    }
+}
+
+query ConditionSearch($input: ConditionSearchInput!) {
+    conditionSearch(input: $input) {
+        result {
+            conditions {
+                conditionName
+                icd10Code
+            }
+        }
+    }
+}
+
+query SearchProvider($searchText: String!) {
+    providersSearch(input: { searchText: $searchText }) {
+        result {
+            items {
+                providerFirstLineBusinessPracticeLocationAddress
+                providerSecondLineBusinessPracticeLocationAddress
+                providerBusinessPracticeLocationAddressCityName
+                providerBusinessPracticeLocationAddressPostalCode
+                providerBusinessPracticeLocationAddressStateName
+                providerBusinessPracticeLocationAddressTelephoneNumber
+                providerFirstName
+                providerLastName
+                primaryTaxonomyDisplayName
+                nPI
+            }
+        }
+    }
+}
+
+query GetProvider($id: UUID!) {
+    careRecipientProviders {
+        id
+        providers(where: { id: { eq: $id } }) {
+            recordStatus
+            firstName
+            id
+            lastName
+            phoneNumber
+            address {
+                addressLine1
+                addressLine2
+                city
+                country
+                state
+                zipCode
+                id
+                singleLineAddress @client
+                freeTextAddress
+            }
+            primarySpecialty
+            codes {
+                code
+                id
+            }
+        }
+    }
+}
+
+query SearchPharmacy($searchText: String!) {
+    pharmacySearch(input: { searchText: $searchText }) {
+        result {
+            results {
+                id
+                address {
+                    streetNumber
+                    streetName
+                    city
+                    zipCode
+                    extendedZipCode
+                    state
+                    freeTextDisplayAddress
+                }
+                poi {
+                    categories
+                    name
+                    phoneNumber
+                    website
+                    operatingHours {
+                        mode
+                        timeRanges {
+                            endTime {
+                                date
+                                hour
+                                minute
+                            }
+                            startTime {
+                                date
+                                hour
+                                minute
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+query GetPharmacies {
+    careRecipientPharmacies {
+        id
+        pharmacies {
+            recordStatus
+            id
+            phoneNumber
+            name
+            location {
+                addressLine1
+                addressLine2
+                city
+                country
+                state
+                zipCode
+                id
+                singleLineAddress @client
+                freeTextAddress
+            }
+        }
+    }
+}
+
+query GetPharmacy($id: UUID!) {
+    careRecipientPharmacies {
+        id
+        pharmacies(where: { id: { eq: $id } }) {
+            recordStatus
+            id
+            phoneNumber
+            name
+            location {
+                addressLine1
+                addressLine2
+                city
+                country
+                state
+                zipCode
+                id
+                singleLineAddress @client
+                freeTextAddress
+            }
+        }
+    }
+}
+
+query SearchImmunization($searchText: String!) {
+    vaccineSearch(input: { searchText: $searchText }) {
+        result {
+            searchResults {
+                code
+                name
+            }
+        }
+    }
+}
+
+query GetImmunizations {
+    careRecipientImmunizations {
+        id
+        immunizations {
+            recordStatus
+            id
+            immunizationDateDay
+            immunizationDateMonth
+            immunizationDateYear
+            immunizationDateRelativePeriodStart
+            immunizationDateRelativePeriodEnd
+            vaccineProductAdministered {
+                id
+                name
+            }
+        }
+    }
+}
+
+query GetImmunization($id: UUID!) {
+    careRecipientImmunizations {
+        id
+        immunizations(where: { id: { eq: $id } }) {
+            recordStatus
+            id
+            immunizationDateDay
+            immunizationDateMonth
+            immunizationDateYear
+            immunizationDateRelativePeriodStart
+            immunizationDateRelativePeriodEnd
+            vaccineProductAdministered {
+                id
+                name
+            }
+        }
+    }
+}
+
+query GetAllergies {
+    careRecipientAllergies {
+        id
+        allergies {
+            recordStatus
+            id
+            allergen {
+                id
+                name
+            }
+            severity
+        }
+    }
+}
+
+query GetAllergy($id: UUID!) {
+    careRecipientAllergies {
+        id
+        allergies(where: { id: { eq: $id } }) {
+            recordStatus
+            id
+            allergen {
+                id
+                name
+            }
+            severity
+        }
+    }
+}
+
+query SearchAddress($searchText: String!, $location: GeolocationCoordinateInput) {
+    addressSearch(input: { searchText: $searchText, location: $location }) {
+        result {
+            results {
+                address {
+                    freeTextDisplayAddress
+                    streetName
+                    streetNumber
+                    zipCode
+                    city
+                    extendedZipCode
+                    state
+                    stateName
+                    country
+                }
+                id
+                poi {
+                    name
+                }
+            }
+        }
+    }
+}
+
+query GetCareRecipientProfile {
+    careRecipientProfile {
+        firstName
+        lastName
+        id
+        email
+        phone
+        dOB
+        weight
+        height
+        legalSex
+        bloodType
+        measurementSystemPreference
+        timeZoneID
+        address {
+            singleLineAddress @client
+            freeTextAddress
+            addressLine1
+            addressLine2
+            city
+            country
+            zipCode
+            state
+            id
+            saveState {
+                addressLine1
+                addressLine2
+                city
+                country
+                freeTextAddress
+                zipCode
+                state
+            }
+        }
+    }
+}
+
+query GetCareRecipientProfileBasic {
+    careRecipientProfile {
+        id
+        firstName
+        lastName
+        dOB
+        phone
+    }
+}
+
+query GetCareRecipientPhoto {
+    careRecipientPhoto {
+        id
+        careRecipientImageURL
+    }
+}
+
+query GetActivities {
+    careCircleExperiences {
+        id
+        experiences {
+            id
+            title
+            details
+            phoneNumber
+            type
+            availability
+            address {
+                id
+                addressLine1
+                addressLine2
+                city
+                state
+                zipCode
+                country
+                freeTextAddress
+                singleLineAddress @client
+            }
+            careCircle {
+                id
+                careCircleMembers {
+                    id
+                    careGiver {
+                        id
+                        displayName
+                        imageBase64
+                    }
+                    experienceOccurrences {
+                        id
+                        experience {
+                            id
+                        }
+                    }
+                    relationshipToLovedOne
+                }
+            }
+        }
+    }
+}
+
+query GetActivity($id: UUID!) {
+    careCircleExperiences {
+        id
+        experiences(where: { id: { eq: $id } }) {
+            id
+            title
+            details
+            phoneNumber
+            type
+            availability
+            address {
+                id
+                addressLine1
+                addressLine2
+                city
+                state
+                zipCode
+                country
+                freeTextAddress
+                singleLineAddress @client
+            }
+            careCircle {
+                id
+                careCircleMembers {
+                    id
+                    careGiver {
+                        id
+                        displayName
+                        imageBase64
+                    }
+                    experienceOccurrences {
+                        id
+                        experience {
+                            id
+                        }
+                    }
+                    relationshipToLovedOne
+                }
+            }
+        }
+    }
+}
+
+query GetCarePlanDocuments {
+    carePlanDocuments {
+        name
+        extension
+        uploadDate
+        id
+        downloadUri
+        careCircle {
+            name
+            careCircleMembers {
+                careGiver {
+                    displayName
+                }
+            }
+        }
+        fileSizeKB
+        createdBy {
+            displayName
+        }
+    }
+}
+
+query GetDocumentQuestionAnswer($input: DocumentInquiryInput!) {
+    documentQuestionAnswer(input: $input) {
+        result {
+            answer
+            context
+            question
+            careCircleFileId
+        }
+    }
+}
+
+query GetCareCircleHasOnboarded {
+    usersCareCircle {
+        id
+        careCircleMembers {
+            id
+            careGiver {
+                id
+                profile {
+                    id
+                    onboardingComplete
+                }
+            }
+        }
+    }
+}
+
+query GetAvailableUserTimeZones {
+    availableUserTimeZones {
+        ianaIds
+        territory
+        windowsId
+    }
+}
+
+query GetCommonConditions {
+    commonCondition {
+        name
+        code
+    }
+}
+
+query GetRelativeTimePeriodEnum {
+    __type(name: "RelativeTimePeriod") {
+        name
+        enumValues {
+            name
+        }
+    }
+}
+query GetPositivitySlot($input: PositivitySlotGenerateInput!) {
+    inquiryPositivitySlot(input: $input) {
+        result {
+            id
+            choices {
+                text
+            }
+        }
+    }
+}
+
+query GetCarePlanCondition($input: DynamicCarePlanGenerateInput!) {
+    inquiryCarePlanCondition(input: $input) {
+        result {
+            id
+            choices {
+                text {
+                    recurrence
+                    task
+                }
+            }
+        }
+    }
+}
+
+query GetConditionResources($input: ResourceSearchInput!) {
+    resourceSearch(input: $input) {
+        result {
+            webPages {
+                value {
+                    webPageID
+                    webPageName
+                    webPageUrl
+                    thumbnailUrl
+                    snippet
+                }
+            }
+        }
+    }
+}
+
+query GetAppointments {
+    careRecipientAppointments {
+        id
+        appointments {
+            recordStatus
+            description
+            endDateTime
+            id
+            location {
+                addressLine1
+                city
+                id
+                freeTextAddress
+                state
+                zipCode
+                saveState {
+                    addressLine1
+                    addressLine2
+                    city
+                    country
+                    freeTextAddress
+                    zipCode
+                    state
+                }
+            }
+            startDateTime
+            recurrence
+        }
+    }
+}
+
+query GetCareRecipientCarePlan {
+    careRecipientCarePlans {
+        id
+        carePlans {
+            id
+            recordStatus
+            activities(where: { recordStatus: { eq: ACTIVE } }) {
+                recordStatus
+                description
+                recurrence
+                id
+                endDateTime
+                startDateTime
+            }
+            careRecipient {
+                id
+            }
+            conditionOccurrence {
+                id
+            }
+        }
+    }
+}
+
+query GetCareGiverAnnotations {
+    careGiverAnnotations {
+        id
+        annotations {
+            id
+            recordStatus
+            createdDateTime
+            type
+            title
+            text
+        }
+    }
+}
+
+query GetCareGiverAnnotation($id: UUID!) {
+    careGiverAnnotations {
+        id
+        annotations(where: { id: { eq: $id } }) {
+            id
+            recordStatus
+            createdDateTime
+            type
+            title
+            text
+        }
+    }
+}
+
+query GetInquiryConditionAdhocQuestion($input: ConditionInquiryInput!) {
+    inquiryConditionAdhocQuestion(input: $input) {
+        result {
+            id
+            choices {
+                text
+            }
+        }
+    }
+}
+
+query GenerateQuestionsForProvider {
+    questionGenerate {
+        result {
+            questions
+        }
+    }
+}
+
+query GenerateSymptoms {
+    symptomParse {
+        result {
+            symptoms
+        }
+    }
+}
+
+query GetInquiryNoteParsing($text: String!) {
+    inquiryNoteParsing(input: { annotationText: $text }) {
+        result {
+            allergies {
+                allergen {
+                    damConceptId
+                    id
+                    name
+                }
+                severity
+            }
+            conditions {
+                condition {
+                    iCD10Code
+                    id
+                    name
+                }
+            }
+            immunizations {
+                vaccineProductAdministered {
+                    cDCProductId
+                    name
+                }
+            }
+            medications {
+                medication {
+                    dispensableDrugId
+                    id
+                    name
+                    routedDoseFormDrugId
+                }
+            }
+        }
+    }
+}
+
+query GetCareRecipientTimeline {
+    careRecipientTimeline {
+        id
+        entities {
+            id
+            type
+            status
+            text
+            relativeTimePeriod
+            date {
+                year
+                month
+                day
+            }
+            dateRange {
+                start {
+                    year
+                }
+                end {
+                    year
+                }
+            }
+        }
+    }
+}

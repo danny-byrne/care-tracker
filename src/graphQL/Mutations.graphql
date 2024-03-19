@@ -1,0 +1,891 @@
+mutation CreateInvite($careCircleId: String!) {
+    createInvite(input: { careCircleId: $careCircleId }) {
+        result {
+            inviteCode
+            inviteFromName
+            careCircleName
+            status
+        }
+    }
+}
+
+# Sends an invitation. If email already exists, backend resends for us.
+mutation AddEmailInvitation(
+    $careCircleId: String!
+    $email: String!
+    $makeAdmin: Boolean!
+    $makeEmergencyContact: Boolean!
+    $relationshipToLovedOne: RelationshipsToLovedOne!
+) {
+    createInvite(
+        input: {
+            careCircleId: $careCircleId
+            recipientEmail: $email
+            makeAdmin: $makeAdmin
+            makeEmergencyContact: $makeEmergencyContact
+            relationshipToLovedOne: $relationshipToLovedOne
+        }
+    ) {
+        result {
+            id
+            deliveryMethod
+            inviteFromName
+            inviteRecipientEmail
+            status
+        }
+    }
+}
+
+mutation RevokeInvite($inviteId: UUID!) {
+    revokeInvite(input: { inviteId: $inviteId }) {
+        result {
+            succeeded
+            errorCode
+        }
+    }
+}
+
+mutation ApproveInvite($careGiverId: UUID!) {
+    careGiverApproveToCareCircle(input: { careGiverId: $careGiverId, isApproved: true }) {
+        result {
+            status
+        }
+    }
+}
+
+mutation RejectInvite($careGiverId: UUID!) {
+    careGiverApproveToCareCircle(input: { careGiverId: $careGiverId, isApproved: false }) {
+        result {
+            status
+        }
+    }
+}
+
+mutation UpdateInvite(
+    $appInvitationId: UUID!
+    $careCircleId: String!
+    $makeAdmin: Boolean!
+    $makeEmergencyContact: Boolean!
+    $relationshipToLovedOne: RelationshipsToLovedOne!
+) {
+    appInvitationUpdate(
+        input: {
+            appInvitationId: $appInvitationId
+            careCircleId: $careCircleId
+            makeAdmin: $makeAdmin
+            makeEmergencyContact: $makeEmergencyContact
+            relationshipToLovedOne: $relationshipToLovedOne
+        }
+    ) {
+        result {
+            status
+        }
+    }
+}
+
+mutation ClearCareCircleData($careCircleName: String!) {
+    clearCareCircleData(input: { confirmCareCircleName: $careCircleName }) {
+        result {
+            succeeded
+        }
+    }
+}
+
+mutation CreateAccount {
+    createCareGiver(input: { populateFromMsGraph: true }) {
+        result {
+            id
+            imageBase64
+            displayName
+            mobile
+            email
+        }
+    }
+}
+
+mutation CreateCareCircle($circleName: String!) {
+    createCareCircle(input: { name: $circleName }) {
+        result {
+            id
+            name
+        }
+    }
+}
+
+mutation JoinCircleFromInviteLink($careGiverId: String!, $inviteCode: String!) {
+    joinCareCircleFromInviteLink(input: { careGiverId: $careGiverId, inviteCode: $inviteCode }) {
+        result {
+            status
+            careCircleName
+            careCircleId
+        }
+    }
+}
+
+mutation RemoveMember($input: RemoveCareGiverFromCareCircleInput!) {
+    removeCareGiverFromCareCircle(input: $input) {
+        result {
+            succeeded
+            additionalDetails
+        }
+    }
+}
+
+mutation SetIsEmergencyContact($careGiverId: UUID!, $isEmergencyContact: Boolean!) {
+    careGiverSetEmergencyContact(input: { careGiverId: $careGiverId, isEmergencyContact: $isEmergencyContact }) {
+        result {
+            status
+            careCircle {
+                id
+                careCircleMembers(where: { careGiverId: { eq: $careGiverId } }) {
+                    id
+                    status
+                    profile {
+                        id
+                        role
+                    }
+                    careGiver {
+                        id
+                        displayName
+                        email
+                        imageBase64
+                        mobile
+                    }
+                    isEmergencyContact
+                    relationshipToLovedOne
+                }
+            }
+        }
+    }
+}
+
+mutation SetIsAdmin($careGiverId: UUID!, $isAdmin: Boolean!) {
+    careGiverSetAdmin(input: { careGiverId: $careGiverId, isAdmin: $isAdmin }) {
+        result {
+            status
+            careCircle {
+                id
+                careCircleMembers(where: { careGiverId: { eq: $careGiverId } }) {
+                    id
+                    status
+                    profile {
+                        id
+                        role
+                    }
+                    careGiver {
+                        id
+                        displayName
+                        email
+                        imageBase64
+                        mobile
+                    }
+                    isEmergencyContact
+                    relationshipToLovedOne
+                }
+            }
+        }
+    }
+}
+
+mutation CareGiverSetRelationshipToLovedOne($careGiverId: UUID!, $relationship: RelationshipsToLovedOne!) {
+    careGiverSetRelationshipToLovedOne(input: { careGiverId: $careGiverId, relationship: $relationship }) {
+        result {
+            careCircle {
+                id
+                careCircleMembers(where: { careGiverId: { eq: $careGiverId } }) {
+                    id
+                    status
+                    profile {
+                        id
+                        role
+                    }
+                    careGiver {
+                        id
+                        displayName
+                        email
+                        imageBase64
+                        mobile
+                    }
+                    isEmergencyContact
+                    relationshipToLovedOne
+                }
+            }
+        }
+    }
+}
+
+mutation SetNotificationPreference($isEnabled: Boolean!, $preferenceToSet: NotificationPreference!) {
+    notificationPreferencesSet(input: { isEnabled: $isEnabled, preferenceToSet: $preferenceToSet }) {
+        result {
+            id
+        }
+    }
+}
+
+mutation CreateProvider(
+    $firstName: String
+    $lastName: String!
+    $nPI: String
+    $phoneNumber: String
+    $address: LocationFindOrCreateInput
+    $primarySpecialty: String!
+) {
+    providerCreate(
+        input: {
+            firstName: $firstName
+            lastName: $lastName
+            nPI: $nPI
+            phoneNumber: $phoneNumber
+            address: $address
+            primarySpecialty: $primarySpecialty
+        }
+    ) {
+        result {
+            id
+        }
+    }
+}
+
+mutation CreateConditionOccurrence($input: ConditionOccurrenceCreateInput!) {
+    conditionOccurrenceCreate(input: $input) {
+        result {
+            id
+        }
+    }
+}
+
+mutation UpdateConditionOccurrence($input: ConditionOccurrenceUpdateInput!) {
+    conditionOccurrenceUpdate(input: $input) {
+        result {
+            id
+        }
+    }
+}
+
+mutation DeleteConditionOccurence($id: UUID!) {
+    conditionOccurrenceDelete(input: { id: $id }) {
+        result {
+            id
+        }
+    }
+}
+
+mutation UpdateProvider(
+    $firstName: String
+    $lastName: String!
+    $nPI: String
+    $phoneNumber: String
+    $address: LocationFindOrCreateInput
+    $id: UUID!
+    $primarySpecialty: String!
+) {
+    providerUpdate(
+        input: {
+            firstName: $firstName
+            lastName: $lastName
+            nPI: $nPI
+            phoneNumber: $phoneNumber
+            address: $address
+            id: $id
+            primarySpecialty: $primarySpecialty
+        }
+    ) {
+        result {
+            id
+        }
+    }
+}
+
+mutation RemoveProvider($id: UUID!) {
+    providerDelete(input: { id: $id }) {
+        result {
+            id
+        }
+    }
+}
+
+mutation CreateCareRecipientProfile($firstName: String!, $lastName: String) {
+    careRecipientProfileCreate(input: { firstName: $firstName, lastName: $lastName }) {
+        result {
+            id
+            firstName
+            lastName
+        }
+    }
+}
+
+mutation UploadCareRecipientPhoto($input: CareRecipientPhotoUploadInput!) {
+    careRecipientPhotoUpload(input: $input) {
+        url
+    }
+}
+
+mutation UpdateCareRecipientProfile(
+    $firstName: String!
+    $lastName: String
+    $dOB: String
+    $email: String
+    $phone: String
+    $bloodType: BloodTypes
+) {
+    careRecipientProfileUpdate(
+        input: {
+            firstName: $firstName
+            lastName: $lastName
+            dOB: $dOB
+            email: $email
+            phone: $phone
+            bloodType: $bloodType
+        }
+    ) {
+        result {
+            id
+        }
+    }
+}
+
+mutation UpdateCareRecipientAddress(
+    $addressLine1: String
+    $addressLine2: String
+    $city: String
+    $state: String
+    $country: String
+    $zipCode: String
+    $freeTextAddress: String
+) {
+    careRecipientAddressUpdate(
+        input: {
+            address: {
+                freeTextAddress: $freeTextAddress
+                addressLine1: $addressLine1
+                addressLine2: $addressLine2
+                city: $city
+                state: $state
+                country: $country
+                zipCode: $zipCode
+            }
+        }
+    ) {
+        result {
+            firstName
+            lastName
+            address {
+                id
+                addressLine1
+                state
+            }
+        }
+    }
+}
+
+mutation UpdateCareRecipientMeasurements($height: Decimal, $weight: Decimal) {
+    careRecipientMeasurementsUpdate(input: { height: $height, weight: $weight }) {
+        result {
+            firstName
+            lastName
+            height
+            weight
+        }
+    }
+}
+
+mutation UpdateCareRecipientMeasurementSystem($measurementSystem: MeasurementSystem!) {
+    careRecipientMeasurementSystemUpdate(input: { measurementSystem: $measurementSystem }) {
+        result {
+            firstName
+            lastName
+            measurementSystemPreference
+        }
+    }
+}
+
+mutation UpdateCareRecipientTimezone($timezoneId: String!) {
+    careRecipientTimezoneUpdate(input: { timeZoneID: $timezoneId }) {
+        result {
+            id
+            timeZoneID
+        }
+    }
+}
+
+mutation CaregiverNotificationSettingsUpdate($mobileNumber: String, $timeZoneID: String!) {
+    caregiverNotificationSettingsUpdate(input: { mobileNumber: $mobileNumber, timeZoneID: $timeZoneID }) {
+        result {
+            id
+            mobile
+            timeZoneID
+            timeZoneGenericName
+        }
+    }
+}
+
+mutation CareGiverCareCircleNotificationSettingsDefaults(
+    $enableSMSChannelOnAllNotifications: Boolean!
+    $enableEmailChannelOnAllNotifications: Boolean!
+) {
+    careGiverCarecircleNotificationSettingsDefaults(
+        input: {
+            enableSMSChannelOnAllNotifications: $enableSMSChannelOnAllNotifications
+            enableEmailChannelOnAllNotifications: $enableEmailChannelOnAllNotifications
+        }
+    ) {
+        result {
+            profileId
+        }
+    }
+}
+
+mutation NotificationPreferenceUpdate(
+    $notificationFeature: Feature!
+    $sMSEnabled: Boolean!
+    $emailEnabled: Boolean!
+    $inAppEnabled: Boolean!
+) {
+    notificationPreferenceUpdate(
+        input: {
+            notificationFeature: $notificationFeature
+            sMSEnabled: $sMSEnabled
+            emailEnabled: $emailEnabled
+            inAppEnabled: $inAppEnabled
+        }
+    ) {
+        result {
+            notificationsPreferences {
+                notification {
+                    availableChannels
+                    feature
+                }
+                userChannelSelections {
+                    sMSEnabled
+                    emailEnabled
+                    inAppEnabled
+                }
+            }
+        }
+    }
+}
+
+mutation CreatePharmacy($name: String, $phoneNumber: String, $location: LocationFindOrCreateInput) {
+    pharmacyCreate(input: {name: $name, phoneNumber: $phoneNumber, location: $location }) {
+        result {
+            id
+        }
+    }
+}
+
+mutation UpdatePharmacy($phoneNumber: String, $location: LocationFindOrCreateInput, $id: UUID!, $name: String) {
+    pharmacyUpdate(input: {phoneNumber: $phoneNumber, location: $location, id: $id, name: $name }) {
+        result {
+            id
+        }
+    }
+}
+
+mutation RemovePharmacy($id: UUID!) {
+    pharmacyDelete(input: { id: $id }) {
+        result {
+            id
+        }
+    }
+}
+
+# TODO: Update below
+mutation CreateImmunization(
+    $immunizationDateDay: Int
+    $immunizationDateMonth: Month
+    $immunizationDateYear: Int
+    $immunizationDateRelativePeriodStart: Int
+    $immunizationDateRelativePeriodEnd: Int
+    $vaccineProductAdministered: VaccineFindOrCreateInput
+) {
+    immunizationCreate(
+        input: {
+            immunizationDateDay: $immunizationDateDay
+            immunizationDateMonth: $immunizationDateMonth
+            immunizationDateYear: $immunizationDateYear
+            immunizationDateRelativePeriodStart: $immunizationDateRelativePeriodStart
+            immunizationDateRelativePeriodEnd: $immunizationDateRelativePeriodEnd
+            vaccineProductAdministered: $vaccineProductAdministered
+        }
+    ) {
+        result {
+            id
+        }
+    }
+}
+
+mutation UpdateImmunization(
+    $id: UUID!
+    $immunizationDateDay: Int
+    $immunizationDateMonth: Month
+    $immunizationDateYear: Int
+    $immunizationDateRelativePeriodStart: Int
+    $immunizationDateRelativePeriodEnd: Int
+    $vaccineProductAdministered: VaccineFindOrCreateInput
+) {
+    immunizationUpdate(
+        input: {
+            id: $id
+            immunizationDateDay: $immunizationDateDay
+            immunizationDateMonth: $immunizationDateMonth
+            immunizationDateYear: $immunizationDateYear
+            immunizationDateRelativePeriodStart: $immunizationDateRelativePeriodStart
+            immunizationDateRelativePeriodEnd: $immunizationDateRelativePeriodEnd
+            vaccineProductAdministered: $vaccineProductAdministered
+        }
+    ) {
+        result {
+            recordStatus
+            id
+            immunizationDateDay
+            immunizationDateMonth
+            immunizationDateYear
+            immunizationDateRelativePeriodStart
+            immunizationDateRelativePeriodEnd
+            vaccineProductAdministered {
+                id
+                name
+            }
+        }
+    }
+}
+
+mutation RemoveImmunization($id: UUID!) {
+    immunizationDelete(input: { id: $id }) {
+        result {
+            id
+        }
+    }
+}
+
+mutation AgreeToTermsOfService(
+    $careGiverId: UUID!
+    $agreesHasConsentToManageLoveOnesHealth: Boolean!
+    $agreesToTermsAndPrivacy: Boolean!
+    $understandsIntendedAppUse: Boolean!
+    $understandsMicrosoftUseOfTheirData: Boolean!
+    $understandsNotPermittedToUsePlatformForMinors: Boolean!
+    $agreesToOpenAiUse: Boolean!
+) {
+    careGiverConsentUpdate(
+        input: {
+            careGiverId: $careGiverId
+            agreesHasConsentToManageLoveOnesHealth: $agreesHasConsentToManageLoveOnesHealth
+            agreesToTermsAndPrivacy: $agreesToTermsAndPrivacy
+            understandsIntendedAppUse: $understandsIntendedAppUse
+            understandsMicrosoftUseOfTheirData: $understandsMicrosoftUseOfTheirData
+            understandsNotPermittedToUsePlatformForMinors: $understandsNotPermittedToUsePlatformForMinors
+            agreesToOpenAiUse: $agreesToOpenAiUse
+        }
+    ) {
+        result {
+            agreesToTermsAndPrivacy
+            agreesHasConsentToManageLoveOnesHealth
+            understandsIntendedAppUse
+            understandsMicrosoftUseOfTheirData
+            understandsNotPermittedToUsePlatformForMinors
+            agreesToOpenAiUse
+            id
+        }
+    }
+}
+
+mutation CreateAllergy($input: AllergyCreateInput!) {
+    allergyCreate(input: $input) {
+        result {
+            id
+        }
+    }
+}
+
+mutation UpdateAllergy($id: UUID!, $severity: AllergySeverity!) {
+    allergyUpdate(input: { id: $id, severity: $severity }) {
+        result {
+            id
+        }
+    }
+}
+
+mutation RemoveAllergy($id: UUID!) {
+    allergyDelete(input: { id: $id }) {
+        result {
+            id
+        }
+    }
+}
+
+mutation CreateActivity(
+    $title: String
+    $details: String
+    $phoneNumber: String
+    $type: ExperienceType
+    $availability: String!
+    $address: LocationCreateInput
+) {
+    experienceCreate(
+        input: {
+            title: $title
+            details: $details
+            phoneNumber: $phoneNumber
+            type: $type
+            availability: $availability
+            address: $address
+        }
+    ) {
+        result {
+            id
+            title
+            details
+            phoneNumber
+            type
+            availability
+            address {
+                id
+                addressLine1
+                addressLine2
+                city
+                state
+                zipCode
+            }
+        }
+    }
+}
+
+mutation UpdateActivity(
+    $id: UUID!
+    $title: String
+    $details: String
+    $phoneNumber: String
+    $type: ExperienceType
+    $availability: String!
+    $address: LocationCreateInput
+) {
+    experienceUpdate(
+        input: {
+            id: $id
+            title: $title
+            details: $details
+            phoneNumber: $phoneNumber
+            type: $type
+            availability: $availability
+            address: $address
+        }
+    ) {
+        result {
+            id
+            title
+            details
+            phoneNumber
+            type
+            availability
+            address {
+                id
+                addressLine1
+                addressLine2
+                city
+                state
+                zipCode
+            }
+        }
+    }
+}
+
+mutation RemoveActivity($id: UUID!) {
+    experienceDelete(input: { id: $id }) {
+        result {
+            succeeded
+        }
+    }
+}
+
+mutation CreateActivityOccurrence($careGiverId: UUID!, $experience: ExperienceInput) {
+    experienceOccurrenceCreate(input: {careGiverId: $careGiverId, experience: $experience }) {
+        result {
+            id
+            careCircleMembership {
+                id
+            }
+            experience {
+                id
+            }
+        }
+    }
+}
+
+mutation RemoveActivityOccurrence($id: UUID!) {
+    experienceOccurrenceDelete(input: { id: $id }) {
+        result {
+            succeeded
+        }
+    }
+}
+
+mutation UploadCarePlanDocument($input: CarePlanDocumentUploadInput!) {
+    carePlanDocumentUpload(input: $input) {
+        file {
+            id
+            extension
+        }
+    }
+}
+
+mutation RenameCarePlanDocument($input: CarePlanDocumentRenameInput!) {
+    carePlanDocumentRename(input: $input) {
+        file {
+            id
+            name
+        }
+    }
+}
+
+mutation DeleteCarePlanDocument($input: CarePlanDocumentDeleteInput!) {
+    carePlanDocumentDelete(input: $input) {
+        result
+    }
+}
+
+mutation CreateDocumentEmbeddings($input: DocumentEmbedInput!) {
+    documentEmbed(input: $input) {
+        result {
+            id
+            name
+            embeddings {
+                id
+                text
+                textEmbedding
+            }
+        }
+    }
+}
+
+mutation SetUserHasOnboarded {
+    careGiverUpdateOnboardingStatus(input: { onboardingComplete: true }) {
+        result {
+            id
+            onboardingComplete
+        }
+    }
+}
+
+mutation CreateAppointment($input: AppointmentCreateInput!) {
+    appointmentCreate(input: $input) {
+        result {
+            recordStatus
+            description
+            endDateTime
+            id
+            location {
+                addressLine1
+                city
+                id
+                freeTextAddress
+                state
+                zipCode
+            }
+            startDateTime
+            recurrence
+        }
+    }
+}
+
+mutation AppointmentDelete($input: AppointmentDeleteInput!) {
+    appointmentDelete(input: $input) {
+        result {
+            recordStatus
+            id
+            location {
+                addressLine1
+                city
+                state
+                zipCode
+                id
+            }
+            description
+            startDateTime
+            endDateTime
+        }
+    }
+}
+
+mutation AppointmentUpdate($input: AppointmentUpdateInput!) {
+    appointmentUpdate(input: $input) {
+        result {
+            recordStatus
+            id
+            location {
+                addressLine1
+                city
+                state
+                zipCode
+                id
+            }
+            description
+            startDateTime
+            endDateTime
+        }
+    }
+}
+
+mutation CarePlanCreate($input: CarePlanCreateInput!) {
+    carePlanCreate(input: $input) {
+        result {
+            id
+            activities {
+                recordStatus
+                description
+                recurrence
+                id
+                endDateTime
+                startDateTime
+            }
+        }
+    }
+}
+
+mutation ActivityDelete($input: ActivityDeleteInput!) {
+    activityDelete(input: $input) {
+        result {
+            recordStatus
+            description
+            recurrence
+            id
+            endDateTime
+            startDateTime
+        }
+    }
+}
+
+mutation AnnotationCreate($input: AnnotationCreateInput!) {
+    annotationCreate(input: $input) {
+        result {
+            id
+            type
+        }
+    }
+}
+
+mutation AnnotationDelete($input: AnnotationDeleteInput!) {
+    annotationDelete(input: $input) {
+        result {
+            id
+        }
+    }
+}
+
+mutation ConditionOccurenceSetHistorical($id: UUID!) {
+    conditionOccurrenceSetHistorical(input: { id: $id }) {
+        result {
+            id
+            current
+        }
+    }
+}
+
+mutation ConditionOccurenceSetCurrent($id: UUID!) {
+    conditionOccurrenceSetCurrent(input: { id: $id }) {
+        result {
+            id
+            current
+        }
+    }
+}
