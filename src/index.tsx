@@ -74,6 +74,7 @@ if ("serviceWorker" in navigator) {
 
 const renderReactDom = () => {
   initConsent();
+  console.log("index.tsx");
 
   // Initializing centro engine
   initializeCentro();
