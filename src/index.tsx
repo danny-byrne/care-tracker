@@ -1,3 +1,4 @@
+/*eslint-disble*/
 import { MsalProvider } from "@azure/msal-react";
 import { ThemeProvider, initializeIcons, registerIcons } from "@fluentui/react";
 import { ApolloProvider } from "@apollo/client";
