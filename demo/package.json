@@ -1,0 +1,11 @@
+{
+  "name": "kindred-care-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Independent care coordination portfolio demo with fictional data",
+  "scripts": {
+    "dev": "node server.mjs",
+    "start": "node server.mjs",
+    "check": "node --check dist/app.js && node --check server.mjs"
+  }
+}

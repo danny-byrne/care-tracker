@@ -1,3 +1,18 @@
+# Care Tracker portfolio
+
+## Working demo: Kindred
+
+A fresh, independent care coordination demo is available in [`demo/`](demo/README.md). It includes a fictional care overview, an editable weekly calendar, browser persistence, daily check-offs, reset, and a printable care plan. It contains no Microsoft product source or branding and runs without sign-in or a backend.
+
+```bash
+cd demo
+npm run dev
+```
+
+Open http://127.0.0.1:4173. No dependency installation is required; Node.js 20+ is sufficient. The original extracted source below remains a separate code sample and is not used by the demo.
+
+---
+
 # Care Tracker
 
 A React and TypeScript care coordination frontend, shared as a portfolio sample representing work I did for Microsoft.
